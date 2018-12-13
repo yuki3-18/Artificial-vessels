@@ -7,28 +7,40 @@
 #include<Eigen/Core>
 #include<Eigen/Dense>
 #include"function.h"
+#include <other/narimhd.h>
+#include "itkImage.h"
+#include "itkImageFileWriter.h"
+#include "ItkImageIO.h"
 
+typedef unsigned short	PixelType;
+const unsigned int	Dimension = 3;
+typedef itk::Image< PixelType, Dimension >	ImageType;
+typedef itk::ImageFileWriter< ImageType > WriterType;
 
 double function(double r){
 
 	//ê≥ãKï™ïz
-	int A = 1777;
-	double sigma =1;
-	double result = A / (sqrt(2.0 * M_PI * pow(sigma,2.0))) * exp(- (r*r) / 2.0 / pow(sigma,2.0));
+	double A = 667;
+	double sigma = 0.906;
+	double result = A * exp(- (r*r) / 2.0 / pow(sigma,2.0));
 	
 	return result;
 }
 
 int main(int argc, char * argv[]){
 
-	//setting
-	std::string output_path = argv[1];
-	int data_size = atoi(argv[2]);
 
-	const int patch_side_size = 9;
+	//setting
+	std::string output_path = argv[1]/*"E:/git/TFRecord_example/in/2axis/noise/train/"*//*"E:/from_kubo/ConsoleApplication1/x64/Release/output/"*/;
+
+	int data_size = atoi(argv[2])/*10*/;
+
+	nari::mhd mhdI;
+
+	const int patch_side_size = 15;
 	const int patch_size = patch_side_size * patch_side_size * patch_side_size;
 	int hani = (int)patch_side_size / 2;
-//	double range = M_PI / 2;
+	double range = M_PI / 2;
 
 	//input_image
 	Eigen::MatrixXd image_vec;
@@ -52,6 +64,14 @@ int main(int argc, char * argv[]){
 		rnd_phi(i+1) = -asin(dist3(mt_phi));
 	}
 
+	//rnd_delta
+	std::random_device seed_delta;
+	std::mt19937_64 mt_delta(seed_delta());
+	std::uniform_real_distribution<double> dist4(-2.688, 2.688);
+
+
+
+
 	//make_loop
 	for (int loop = 0; loop < data_size; loop++){
 
@@ -68,14 +88,14 @@ int main(int argc, char * argv[]){
 
 		Eigen::MatrixXd rotation_temp;
 		rotation_temp = Rz * Ry;
-	//	rotation_temp = Rz ;
+		//rotation_temp = Rz ;
 
 		//rotation
 		Eigen::MatrixXd rotation = rotation_temp.leftCols(1);
 		
 		//rnd_noise
 		int mean = 0;
-		int var = 35;
+		double var = 22.2;
 		std::random_device seed_noise;
 		std::mt19937_64 engine(seed_noise());
 		std::normal_distribution<double> dist(mean, var);
@@ -98,19 +118,35 @@ int main(int argc, char * argv[]){
 					double r = sqrt(X_dash.squaredNorm());
 					//image_vec(i) = function(r);
 					image_vec(i) = function(r) + noise(i);
+					//image_vec(i) = function(r + delta);
 					i++;
 				}
 			}
 		}
 		
 		std::string theta = std::to_string(rnd_theta(loop)*180.0/M_PI);
-		std::string phi = std::to_string(rnd_phi(loop)*180.0/M_PI);
+		std::string phi = std::to_string(rnd_phi(loop)*180.0/M_PI/*0*/);
+
+		std::vector<double> image_std(image_vec.data(), image_vec.data() + image_vec.size());
+
+		ImageIO<3> imageio;
+		imageio.SetSize(0, 9);
+		imageio.SetSize(1, 9);
+		imageio.SetSize(2, 9);
+		imageio.SetSpacing(0, 0.885);
+		imageio.SetSpacing(1, 0.885);
+		imageio.SetSpacing(2, 1);
+		imageio.Write(image_std, output_path + "output_" + theta + "_" + phi + "_learn.mhd");
 
 		write_raw_and_txt(image_vec, output_path + "output_" + theta + "_" + phi + "_learn");
 		std::ofstream outputfile(output_path + "filename.txt", std::ios::app);
-		outputfile << output_path + "output_" + theta + "_" + phi + "_learn" + ".raw" << std::endl;
+		outputfile << output_path + "output_" + theta + "_" + phi + "_learn" + ".mhd" << std::endl;
 		outputfile.close();
+
+		WriterType::Pointer writer = WriterType::New();
+		writer->SetFileName(output_path + "output_" + theta + "_" + phi + "_learn");
+	
+
 	}
 	return	0;
 }
-

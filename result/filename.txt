@@ -1,0 +1,10 @@
+E:\from_kubo\ConsoleApplication1\result\output_59.923747_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_18.243183_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_61.833431_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_-59.301827_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_-12.845935_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_-76.428788_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_-39.338113_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_-47.656566_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_-89.377179_0.000000_learn.raw
+E:\from_kubo\ConsoleApplication1\result\output_-60.514709_0.000000_learn.raw

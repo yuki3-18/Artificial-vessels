@@ -137,7 +137,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>F:\source\eigen-eigen-dc6cfdf9bcec;F:\source\nalib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Source\nalib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,8 +153,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="function.h" />
+    <ClInclude Include="ItkImageIO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\itk_static_vc141-x64-release.4.12.2\build\native\itk_static_vc141-x64-release.targets" Condition="Exists('..\packages\itk_static_vc141-x64-release.4.12.2\build\native\itk_static_vc141-x64-release.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\itk_static_vc141-x64-release.4.12.2\build\native\itk_static_vc141-x64-release.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\itk_static_vc141-x64-release.4.12.2\build\native\itk_static_vc141-x64-release.targets'))" />
+  </Target>
 </Project>
