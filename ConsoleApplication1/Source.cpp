@@ -37,7 +37,7 @@ int main(int argc, char * argv[]){
 
 	nari::mhd mhdI;
 
-	const int patch_side_size = 15;
+	const int patch_side_size = 9;
 	const int patch_size = patch_side_size * patch_side_size * patch_side_size;
 	int hani = (int)patch_side_size / 2;
 	double range = M_PI / 2;
@@ -68,8 +68,6 @@ int main(int argc, char * argv[]){
 	std::random_device seed_delta;
 	std::mt19937_64 mt_delta(seed_delta());
 	std::uniform_real_distribution<double> dist4(-2.688, 2.688);
-
-
 
 
 	//make_loop
