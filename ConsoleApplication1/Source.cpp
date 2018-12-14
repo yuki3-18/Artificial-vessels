@@ -94,17 +94,17 @@ int main(int argc, char * argv[]) {
 			0, 0, 1;
 
 		Eigen::MatrixXd rotation_temp;
-		//rotation_temp = Rz * Ry;
-		rotation_temp = Rz ;
+		rotation_temp = Rz * Ry;
+		//rotation_temp = Rz ;
 
 		//rotation
 		Eigen::MatrixXd rotation = rotation_temp.leftCols(1);
-		std::cout << "loop=" << loop << std::endl;
+		//std::cout << "loop=" << loop << std::endl;
 
 		//shift
 		//Eigen::MatrixXd shift = delta.col(loop);
 		int dx = dist4(mt_delta);	int dy = dist4(mt_delta);	int dz = dist4(mt_delta);
-		std::cout << "dx=" << dx <<"dy=" << dy << "dz=" << dz << std::endl;
+		//std::cout << "dx=" << dx <<"dy=" << dy << "dz=" << dz << std::endl;
 		
 		//rnd_noise
 		int mean = 0;
@@ -137,7 +137,7 @@ int main(int argc, char * argv[]) {
 		}
 		
 		std::string theta = std::to_string(rnd_theta(loop)*180.0/M_PI);
-		std::string phi = std::to_string(/*rnd_phi(loop)*180.0/M_PI*/0);
+		std::string phi = std::to_string(rnd_phi(loop)*180.0/M_PI/*0*/);
 
 		std::vector<double> image_std(image_vec.data(), image_vec.data() + image_vec.size());
 
@@ -161,6 +161,6 @@ int main(int argc, char * argv[]) {
 	
 
 	}
-	system("pause");
+	//system("pause");
 	return	0;
 }
