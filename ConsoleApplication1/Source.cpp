@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
 	std::mt19937_64 mt_theta(seed_theta());
 	std::uniform_real_distribution<double> dist2(-M_PI / 2, M_PI / 2);
 	Eigen::VectorXd rnd_theta; rnd_theta.resize(data_size, 1);
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < data_size; i++)
 		rnd_theta(i) = dist2(mt_theta);
 
 	//rnd_phi
@@ -68,7 +68,7 @@ int main(int argc, char * argv[]) {
 	std::random_device seed_delta;
 	std::mt19937_64 mt_delta(seed_delta());
 	std::uniform_real_distribution<double> dist4(-2.688, 2.688);
-	Eigen::MatrixXd delta; delta = Eigen::MatrixXd::Zero(3, data_size);
+	//Eigen::MatrixXd delta; delta = Eigen::MatrixXd::Zero(3, data_size);
 	//for (int i = 0; i < data_size; i++) {
 	//	double dx = dist4(mt_delta);	double dy = dist4(mt_delta);	double dz = dist4(mt_delta);
 	//	Eigen::Vector3d d; d << dx, dy, dz;
@@ -78,8 +78,6 @@ int main(int argc, char * argv[]) {
 	//	std::cout << "d=" << d/*x << dy << dz */<< std::endl;
 	//	std::cout << "delta=" << delta << std::endl;
 	//}
-
-	//system("pause");
 
 	//make_loop
 	for (int loop = 0; loop < data_size; loop++){
@@ -101,12 +99,12 @@ int main(int argc, char * argv[]) {
 
 		//rotation
 		Eigen::MatrixXd rotation = rotation_temp.leftCols(1);
-		std::cout << "rotation=" << rotation << std::endl;
+		std::cout << "loop=" << loop << std::endl;
 
 		//shift
 		//Eigen::MatrixXd shift = delta.col(loop);
-		//std::cout << "shift=" << shift << std::endl;
 		int dx = dist4(mt_delta);	int dy = dist4(mt_delta);	int dz = dist4(mt_delta);
+		std::cout << "dx=" << dx <<"dy=" << dy << "dz=" << dz << std::endl;
 		
 		//rnd_noise
 		int mean = 0;
@@ -120,7 +118,7 @@ int main(int argc, char * argv[]) {
 
 		//
 		int i = 0;
-		for (int z = -hani; z <= hani; z++) {
+		for (int z = -hani + dz; z <= hani + dz; z++) {
 			for (int y = -hani + dy; y <= hani + dy; y++){
 				for (int x = -hani + dx; x <= hani + dx; x++){
 					Eigen::MatrixXd X;
@@ -133,7 +131,6 @@ int main(int argc, char * argv[]) {
 					double r = sqrt(X_dash.squaredNorm());
 					image_vec(i) = function(r);
 					//image_vec(i) = function(r) + noise(i);
-					//image_vec(i) = function(r);
 					i++;
 				}
 			}
@@ -160,8 +157,10 @@ int main(int argc, char * argv[]) {
 
 		WriterType::Pointer writer = WriterType::New();
 		writer->SetFileName(output_path + "output_" + theta + "_" + phi + "_learn");
+
 	
 
 	}
+	system("pause");
 	return	0;
 }
