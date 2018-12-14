@@ -27,17 +27,17 @@ double function(double r){
 	return result;
 }
 
-int main(int argc, char * argv[]){
+int main(int argc, char * argv[]) {
 
 
 	//setting
-	std::string output_path = argv[1]/*"E:/git/TFRecord_example/in/2axis/noise/train/"*//*"E:/from_kubo/ConsoleApplication1/x64/Release/output/"*/;
+	std::string output_path = argv[1]/*"E:/git/TFRecord_example/in/2axis/noise/train/"*//*"E:/from_kubo/ConsoleApplication1/x64/Release/output/shift/"*/;
 
 	int data_size = atoi(argv[2])/*10*/;
 
 	nari::mhd mhdI;
 
-	const int patch_side_size = 15;
+	const int patch_side_size = 9;
 	const int patch_size = patch_side_size * patch_side_size * patch_side_size;
 	int hani = (int)patch_side_size / 2;
 	double range = M_PI / 2;
@@ -49,9 +49,9 @@ int main(int argc, char * argv[]){
 	//rnd_theta
 	std::random_device seed_theta;
 	std::mt19937_64 mt_theta(seed_theta());
-	std::uniform_real_distribution<double> dist2(-M_PI / 2, M_PI/2);
+	std::uniform_real_distribution<double> dist2(-M_PI / 2, M_PI / 2);
 	Eigen::VectorXd rnd_theta; rnd_theta.resize(data_size, 1);
-	for (int i = 0; i < data_size; i++)
+	for (int i = 0; i < 3; i++)
 		rnd_theta(i) = dist2(mt_theta);
 
 	//rnd_phi
@@ -59,18 +59,27 @@ int main(int argc, char * argv[]){
 	std::mt19937_64 mt_phi(seed_phi());
 	std::uniform_real_distribution<double> dist3(0, 1.0);
 	Eigen::VectorXd rnd_phi; rnd_phi.resize(data_size, 1);
-	for (int i = 0; i < data_size; i = i + 2){
+	for (int i = 0; i < data_size; i = i + 2) {
 		rnd_phi(i) = asin(dist3(mt_phi));
-		rnd_phi(i+1) = -asin(dist3(mt_phi));
+		rnd_phi(i + 1) = -asin(dist3(mt_phi));
 	}
 
 	//rnd_delta
 	std::random_device seed_delta;
 	std::mt19937_64 mt_delta(seed_delta());
 	std::uniform_real_distribution<double> dist4(-2.688, 2.688);
+	Eigen::MatrixXd delta; delta = Eigen::MatrixXd::Zero(3, data_size);
+	//for (int i = 0; i < data_size; i++) {
+	//	double dx = dist4(mt_delta);	double dy = dist4(mt_delta);	double dz = dist4(mt_delta);
+	//	Eigen::Vector3d d; d << dx, dy, dz;
+	//	//delta.leftCols(i + 1) = d;
+	//	delta.col(i) = d;
+	//	std::cout << "i=" << i << std::endl;
+	//	std::cout << "d=" << d/*x << dy << dz */<< std::endl;
+	//	std::cout << "delta=" << delta << std::endl;
+	//}
 
-
-
+	//system("pause");
 
 	//make_loop
 	for (int loop = 0; loop < data_size; loop++){
@@ -87,11 +96,17 @@ int main(int argc, char * argv[]){
 			0, 0, 1;
 
 		Eigen::MatrixXd rotation_temp;
-		rotation_temp = Rz * Ry;
-		//rotation_temp = Rz ;
+		//rotation_temp = Rz * Ry;
+		rotation_temp = Rz ;
 
 		//rotation
 		Eigen::MatrixXd rotation = rotation_temp.leftCols(1);
+		std::cout << "rotation=" << rotation << std::endl;
+
+		//shift
+		//Eigen::MatrixXd shift = delta.col(loop);
+		//std::cout << "shift=" << shift << std::endl;
+		int dx = dist4(mt_delta);	int dy = dist4(mt_delta);	int dz = dist4(mt_delta);
 		
 		//rnd_noise
 		int mean = 0;
@@ -105,27 +120,27 @@ int main(int argc, char * argv[]){
 
 		//
 		int i = 0;
-		for (int z = -hani; z <= hani; z++){
-			for (int y = -hani; y <= hani; y++){
-				for (int x = -hani; x <= hani; x++){
+		for (int z = -hani; z <= hani; z++) {
+			for (int y = -hani + dy; y <= hani + dy; y++){
+				for (int x = -hani + dx; x <= hani + dx; x++){
 					Eigen::MatrixXd X;
 					X.resize(3, 1);
-					X << x, y, z;
+					X << x , y , z;
 
 					Eigen::MatrixXd X_dash;
 					X_dash.resize(3, 1);
-					X_dash = X - rotation*(rotation.transpose() * X);
+					X_dash = rotation * (rotation.transpose() * X) - X;
 					double r = sqrt(X_dash.squaredNorm());
+					image_vec(i) = function(r);
+					//image_vec(i) = function(r) + noise(i);
 					//image_vec(i) = function(r);
-					image_vec(i) = function(r) + noise(i);
-					//image_vec(i) = function(r + delta);
 					i++;
 				}
 			}
 		}
 		
 		std::string theta = std::to_string(rnd_theta(loop)*180.0/M_PI);
-		std::string phi = std::to_string(rnd_phi(loop)*180.0/M_PI/*0*/);
+		std::string phi = std::to_string(/*rnd_phi(loop)*180.0/M_PI*/0);
 
 		std::vector<double> image_std(image_vec.data(), image_vec.data() + image_vec.size());
 
