@@ -94,8 +94,8 @@ int main(int argc, char * argv[]) {
 			0, 0, 1;
 
 		Eigen::MatrixXd rotation_temp;
-		rotation_temp = Rz * Ry;
-		//rotation_temp = Rz ;
+		//rotation_temp = Rz * Ry;
+		rotation_temp = Rz ;
 
 		//rotation
 		Eigen::MatrixXd rotation = rotation_temp.leftCols(1);
@@ -129,15 +129,15 @@ int main(int argc, char * argv[]) {
 					X_dash.resize(3, 1);
 					X_dash = rotation * (rotation.transpose() * X) - X;
 					double r = sqrt(X_dash.squaredNorm());
-					image_vec(i) = function(r);
-					//image_vec(i) = function(r) + noise(i);
+					//image_vec(i) = function(r);
+					image_vec(i) = function(r) + noise(i);
 					i++;
 				}
 			}
 		}
 		
 		std::string theta = std::to_string(rnd_theta(loop)*180.0/M_PI);
-		std::string phi = std::to_string(rnd_phi(loop)*180.0/M_PI/*0*/);
+		std::string phi = std::to_string(/*rnd_phi(loop)*180.0/M_PI*/0);
 
 		std::vector<double> image_std(image_vec.data(), image_vec.data() + image_vec.size());
 
