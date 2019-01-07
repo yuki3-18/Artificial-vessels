@@ -37,7 +37,7 @@ int main(int argc, char * argv[]){
 
 	nari::mhd mhdI;
 
-	const int patch_side_size = 9;
+	const int patch_side_size = 5;
 	const int patch_size = patch_side_size * patch_side_size * patch_side_size;
 	int hani = (int)patch_side_size / 2;
 	double range = M_PI / 2;
@@ -116,7 +116,6 @@ int main(int argc, char * argv[]){
 					double r = sqrt(X_dash.squaredNorm());
 					//image_vec(i) = function(r);
 					image_vec(i) = function(r) + noise(i);
-					//image_vec(i) = function(r + delta);
 					i++;
 				}
 			}
@@ -128,9 +127,9 @@ int main(int argc, char * argv[]){
 		std::vector<double> image_std(image_vec.data(), image_vec.data() + image_vec.size());
 
 		ImageIO<3> imageio;
-		imageio.SetSize(0, 9);
-		imageio.SetSize(1, 9);
-		imageio.SetSize(2, 9);
+		imageio.SetSize(0, patch_side_size);
+		imageio.SetSize(1, patch_side_size);
+		imageio.SetSize(2, patch_side_size);
 		imageio.SetSpacing(0, 0.885);
 		imageio.SetSpacing(1, 0.885);
 		imageio.SetSpacing(2, 1);
