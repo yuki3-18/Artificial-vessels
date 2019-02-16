@@ -146,3 +146,30 @@ void write_raw_and_txt(const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& d
 	write_vector(save_data, filename + ".raw");
 	Data.resize(rows, cols);
 }
+
+
+template<typename T>
+double value(int x, int y, int z, std::vector<T> &imagevec)
+{
+	const int image_y_size = 15;
+	const int image_x_size = 15;
+	int position = x + image_x_size * y + image_x_size*image_y_size*z;
+	double Gradation_value = imagevec[position];
+
+	return Gradation_value;
+}
+
+
+int int_max(int a, int b) {
+	int m;
+	if (a >= b) m = a;
+	else m = b;
+	return m;
+}
+
+int int_min(int a, int b) {
+	int m;
+	if (a <= b) m = a;
+	else m = b;
+	return m;
+}
