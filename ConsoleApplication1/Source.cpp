@@ -31,13 +31,13 @@ int main(int argc, char * argv[]){
 
 
 	//setting
-	std::string output_path = /*argv[1]*/"E:/git/TFRecord_example/input/shift/train/"/*"E:/from_kubo/ConsoleApplication1/x64/Release/output/shift/"*/;
+	std::string output_path = /*argv[1]*//*"E:/git/TFRecord_example/input/Glow/"*/"E:/from_kubo/ConsoleApplication1/x64/Release/output/Glow/";
 
-	int data_size = /*atoi(argv[2])*/10000;
+	int data_size = /*atoi(argv[2])*/10;
 
 	nari::mhd mhdI;
 
-	const int patch_side_size = 15;
+	const int patch_side_size = 9;
 	const int patch_size = patch_side_size * patch_side_size * patch_side_size;
 	int hani = (int)patch_side_size / 2;
 	double range = M_PI / 2;
@@ -67,7 +67,7 @@ int main(int argc, char * argv[]){
 	//rnd_delta
 	std::random_device seed_delta;
 	std::mt19937_64 mt_delta(seed_delta());
-	std::uniform_real_distribution<double> dist4(-2.688, 2.688);
+	std::uniform_real_distribution<double> dist4(-2.188, 2.188);
 	Eigen::MatrixXd rnd_delta = Eigen::MatrixXd::Zero(3, data_size);
 	for (int i = 0; i < data_size; i++) {
 		double x = dist4(mt_delta); double y = dist4(mt_delta); double z = dist4(mt_delta);
@@ -135,7 +135,7 @@ int main(int argc, char * argv[]){
 
 
 		//input_matrix
-		int ajd = (patch_side_size - 1) / 2;	//入力画像の中心座標算出
+		int ajd = patch_side_size / 2;	//入力画像の中心座標算出
 		Eigen::MatrixXd In; In.resize(Dimension, patch_size);	//出力画像のサイズ
 		for (int k = 0; k < patch_side_size; k++) {
 			for (int j = 0; j < patch_side_size; j++) {
