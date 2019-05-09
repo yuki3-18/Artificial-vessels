@@ -31,13 +31,13 @@ int main(int argc, char * argv[]) {
 
 
 	//setting
-	std::string output_path = argv[1]/*"E:/git/TFRecord_example/in/2axis/noise/train/"*//*"E:/from_kubo/ConsoleApplication1/x64/Release/output/shift/"*/;
+	std::string output_path = /*argv[1]*//*"E:/git/TFRecord_example/in/2axis/noise/train/"*/"E:/from_kubo/ConsoleApplication1/x64/Release/output/Glow/";
 
-	int data_size = atoi(argv[2])/*10*/;
+	int data_size = /*atoi(argv[2])*/10;
 
 	nari::mhd mhdI;
 
-	const int patch_side_size = 9;
+	const int patch_side_size = 8;
 	const int patch_size = patch_side_size * patch_side_size * patch_side_size;
 	int hani = (int)patch_side_size / 2;
 	double range = M_PI / 2;
@@ -67,7 +67,7 @@ int main(int argc, char * argv[]) {
 	//rnd_delta
 	std::random_device seed_delta;
 	std::mt19937_64 mt_delta(seed_delta());
-	std::uniform_real_distribution<double> dist4(-2.688, 2.688);
+	std::uniform_real_distribution<double> dist4(-2.188, 2.188);
 	//Eigen::MatrixXd delta; delta = Eigen::MatrixXd::Zero(3, data_size);
 	//for (int i = 0; i < data_size; i++) {
 	//	double dx = dist4(mt_delta);	double dy = dist4(mt_delta);	double dz = dist4(mt_delta);
@@ -129,8 +129,8 @@ int main(int argc, char * argv[]) {
 					X_dash.resize(3, 1);
 					X_dash = rotation * (rotation.transpose() * X) - X;
 					double r = sqrt(X_dash.squaredNorm());
-					//image_vec(i) = function(r);
-					image_vec(i) = function(r) + noise(i);
+					image_vec(i) = function(r);
+					//image_vec(i) = function(r) + noise(i);
 					i++;
 				}
 			}
@@ -142,9 +142,9 @@ int main(int argc, char * argv[]) {
 		std::vector<double> image_std(image_vec.data(), image_vec.data() + image_vec.size());
 
 		ImageIO<3> imageio;
-		imageio.SetSize(0, 9);
-		imageio.SetSize(1, 9);
-		imageio.SetSize(2, 9);
+		imageio.SetSize(0, 8);
+		imageio.SetSize(1, 8);
+		imageio.SetSize(2, 8);
 		imageio.SetSpacing(0, 0.885);
 		imageio.SetSpacing(1, 0.885);
 		imageio.SetSpacing(2, 1);
