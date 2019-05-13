@@ -31,16 +31,16 @@ int main(int argc, char * argv[]){
 
 
 	//setting
-	std::string output_path = /*argv[1]*//*"E:/git/TFRecord_example/input/Glow/"*/"E:/from_kubo/ConsoleApplication1/x64/Release/output/Glow/";
+	std::string output_path = /*argv[1]*//*"E:/git/TFRecord_example/input/Glow/"*/"E:/from_kubo/ConsoleApplication1/x64/Release/output/Glow/1axis";
 
 	int data_size = /*atoi(argv[2])*/10;
 
 	nari::mhd mhdI;
 
-	const int patch_side_size = 9;
+	const int patch_side_size = 8;
 	const int patch_size = patch_side_size * patch_side_size * patch_side_size;
-	int hani = (int)patch_side_size / 2;
-	double range = M_PI / 2;
+	short hani = patch_side_size / 2;
+	double range = M_PI/2;
 
 	//input_image
 	Eigen::MatrixXd image_vec;
@@ -49,7 +49,7 @@ int main(int argc, char * argv[]){
 	//rnd_theta
 	std::random_device seed_theta;
 	std::mt19937_64 mt_theta(seed_theta());
-	std::uniform_real_distribution<double> dist2(-M_PI / 2, M_PI/2);
+	std::uniform_real_distribution<double> dist2(-M_PI/2, M_PI/2);
 	Eigen::VectorXd rnd_theta; rnd_theta.resize(data_size, 1);
 	for (int i = 0; i < data_size; i++)
 		rnd_theta(i) = dist2(mt_theta);
@@ -94,8 +94,8 @@ int main(int argc, char * argv[]){
 			0, 0, 1;
 
 		Eigen::MatrixXd rotation_temp;
-		rotation_temp = Rz * Ry;
-		//rotation_temp = Rz ;
+		//rotation_temp = Rz * Ry;
+		rotation_temp = Rz ;
 
 		//rotation
 		Eigen::MatrixXd rotation = rotation_temp.leftCols(1);
@@ -113,20 +113,20 @@ int main(int argc, char * argv[]){
 
 		// make_structure
 		int i = 0;
-		for (int z = -hani; z <= hani; z++){
-			for (int y = -hani; y <= hani; y++){
-				for (int x = -hani; x <= hani; x++){
+		for (short z = -hani; z < hani; z++){
+			for (short y = -hani; y < hani; y++){
+				for (short x = -hani; x < hani; x++){
 					Eigen::MatrixXd X;
 					X.resize(3, 1);
-					X << x, y, z;
+					X << x+0.5, y+0.5, z+0.5;
 
 					Eigen::MatrixXd X_dash;
 					X_dash.resize(3, 1);
 					X_dash = X - rotation * (rotation.transpose() * X);
 					double r = sqrt(X_dash.squaredNorm());
 					//double r = sqrt(X.squaredNorm());
-					//image_vec(i) = function(r);
-					image_vec(i) = function(r) + noise(i);
+					image_vec(i) = function(r);
+					//image_vec(i) = function(r) + noise(i);
 					i++;
 				}
 			}
@@ -158,7 +158,7 @@ int main(int argc, char * argv[]){
 		Eigen::Vector3d in;
 		for (int i = 0; i < patch_size; i++) {
 			in = In.col(i);
-			Inout.col(i) = in - rnd_delta.col(loop);
+			Inout.col(i) = in/* - rnd_delta.col(loop)*/;
 		}
 
 		//calcu_coordination
@@ -234,7 +234,7 @@ int main(int argc, char * argv[]){
 
 		
 		std::string theta = std::to_string(rnd_theta(loop)*180.0/M_PI);
-		std::string phi = std::to_string(rnd_phi(loop)*180.0/M_PI/*0*/);
+		std::string phi = std::to_string(/*rnd_phi(loop)*180.0/M_PI*/0);
 
 		std::vector<double> image_std(output.data(), output.data() + output.size());
 

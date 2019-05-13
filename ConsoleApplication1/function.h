@@ -151,8 +151,8 @@ void write_raw_and_txt(const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>& d
 template<typename T>
 double value(int x, int y, int z, std::vector<T> &imagevec)
 {
-	const int image_y_size = 15;
-	const int image_x_size = 15;
+	const int image_y_size = 8;
+	const int image_x_size = 8;
 	int position = x + image_x_size * y + image_x_size*image_y_size*z;
 	double Gradation_value = imagevec[position];
 
