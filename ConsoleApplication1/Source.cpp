@@ -158,7 +158,7 @@ int main(int argc, char * argv[]){
 		Eigen::Vector3d in;
 		for (int i = 0; i < patch_size; i++) {
 			in = In.col(i);
-			Inout.col(i) = in/* - rnd_delta.col(loop)*/;
+			Inout.col(i) = in - rnd_delta.col(loop);
 		}
 
 		//calcu_coordination
