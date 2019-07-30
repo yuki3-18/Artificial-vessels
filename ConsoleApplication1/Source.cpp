@@ -31,9 +31,9 @@ int main(int argc, char * argv[]) {
 
 
 	//setting
-	std::string output_path = /*argv[1]*//*"E:/git/TFRecord_example/in/2axis/noise/train/"*/"E:/from_kubo/ConsoleApplication1/x64/Release/output/Glow/";
+	std::string output_path = /*argv[1]*//*"E:/git/TFRecord_example/in/2axis/noise/train/"*/"E:/test/";
 
-	int data_size = /*atoi(argv[2])*/10;
+	int data_size = /*atoi(argv[2])*/5;
 
 	nari::mhd mhdI;
 
@@ -118,9 +118,9 @@ int main(int argc, char * argv[]) {
 
 		//
 		int i = 0;
-		for (int z = -hani + dz; z <= hani + dz; z++) {
-			for (int y = -hani + dy; y <= hani + dy; y++){
-				for (int x = -hani + dx; x <= hani + dx; x++){
+		for (int z = -hani + 1; z <= hani; z++) {
+			for (int y = -hani + 1; y <= hani; y++){
+				for (int x = -hani + 1; x <= hani; x++){
 					Eigen::MatrixXd X;
 					X.resize(3, 1);
 					X << x , y , z;
